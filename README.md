@@ -15,5 +15,11 @@ For truffle tests and console please consult the official Truffle documentaion f
 Follow the course module on Udemy to build this project from the ground up:
 https://www.udemy.com/course/the-complete-solidity-course-blockchain-zero-to-expert/
 
-Good luck and have fun!
+init project with truffle.
+- truffle init
+compile project
+- truffle compile
+
+deploy to local blockchain
+- truffle migrate
 
