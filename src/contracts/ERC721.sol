@@ -13,6 +13,23 @@ contract ERC721 {
     // mapping from owner to number of owned token
     mapping(address => uint256) private _OwnedTokenCount;
 
+
+
+    function balanceOf(address _owner) public view returns(uint256){
+        require(_owner != address (0), 'Non-Exist token');
+        return _OwnedTokenCount[_owner];
+    }
+
+    // @notice finding the owner of nft
+    // @dev nft assign to zero address is considered invalid
+    // @param _tokenId is the identifier of a nft
+    // @return the address of the owner of a nft
+    function ownerOf(uint256 _tokenId) external view returns(address){
+       address owner = _tokenOwner[_tokenId];
+        require(owner != address (0), 'Non-Exist token');
+        return owner;
+    }
+
     function _exists(uint256 tokenId) internal view returns(bool){
         // checking the mapping of address
      address owner = _tokenOwner[tokenId];
@@ -30,5 +47,6 @@ contract ERC721 {
 
         emit Transfer(address(0), to, tokenId);
     }
+
 
 }
