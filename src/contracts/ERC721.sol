@@ -7,11 +7,15 @@ pragma solidity ^0.8.0;
 // create an events that emits  transfer logs - contract address where it is being minted to, the id
 contract ERC721 {
      event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
+
+    event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);
     // mapping from token id to owners
     mapping(uint256 => address) private _tokenOwner;
 
     // mapping from owner to number of owned token
     mapping(address => uint256) private _OwnedTokenCount;
+
+    mapping(uint256 => address) private _tokenApprovals;
 
 
 
@@ -58,7 +62,33 @@ contract ERC721 {
     /// @param _from The current owner of the NFT
     /// @param _to The new owner
     /// @param _tokenId The NFT to transfer
-    function transferFrom(address _from, address _to, uint256 _tokenId) external payable;
+    function transferFrom(address _from, address _to, uint256 _tokenId) public virtual {
+        require(isApprovedOrOwner(msg.sender,  _tokenId), 'it requires to be approved');
+      _transfer(_from, _to, _tokenId);
+    }
+
+    function _transfer(address from, address to, uint256 tokenId) public {
+
+    }
+
+    // it requires person approves is the owner, approve the address
+
+    function approve(address _to, uint256 _tokenId) public {
+        // address owner = ownerOf(_tokenId);
+        address owner = _tokenOwner[_tokenId];
+        require(_to!= owner, "should be owner");
+        require(msg.sender == owner, 'current caller is not the owner');
+        _tokenApprovals[_tokenId] = _to;
+        emit Approval(owner, _to, _tokenId);
+    }
+
+    function isApprovedOrOwner(address spender, uint256 _tokenId) internal view returns(bool){
+        require(_exists(_tokenId), 'token does not exists');
+        //address owner = ownerOf(_tokenId);
+        address owner = _tokenOwner[_tokenId];
+        return(spender == owner);
+    }
+
 
 
 }
