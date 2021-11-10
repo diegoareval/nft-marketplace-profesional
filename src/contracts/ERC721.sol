@@ -1,14 +1,20 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+import './ERC165.sol';
+import './interfaces/IERC721.sol';
 // NFT to point an address
 // keep track token ids
 // keep track token owners addresses to token ids
 // keep track how many token an owner has
 // create an events that emits  transfer logs - contract address where it is being minted to, the id
-contract ERC721 {
-     event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
+contract ERC721 is  ERC165, IERC721 {
 
-    event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);
+
+    constructor() {
+        _registerInterface(bytes4(keccak256('balanceOf(bytes4)')^
+        keccak256('ownerOf(bytes4)')^keccak256('transferFrom(bytes4)')));
+    }
+
     // mapping from token id to owners
     mapping(uint256 => address) private _tokenOwner;
 
@@ -19,20 +25,11 @@ contract ERC721 {
 
 
 
-    function balanceOf(address _owner) public view returns(uint256){
+    function balanceOf(address _owner) public override view returns(uint256){
         require(_owner != address (0), 'Non-Exist token');
         return _OwnedTokenCount[_owner];
     }
 
-    // @notice finding the owner of nft
-    // @dev nft assign to zero address is considered invalid
-    // @param _tokenId is the identifier of a nft
-    // @return the address of the owner of a nft
-    function ownerOf(uint256 _tokenId) external view returns(address){
-       address owner = _tokenOwner[_tokenId];
-        require(owner != address (0), 'Non-Exist token');
-        return owner;
-    }
 
     function _exists(uint256 tokenId) internal view returns(bool){
         // checking the mapping of address
@@ -62,13 +59,15 @@ contract ERC721 {
     /// @param _from The current owner of the NFT
     /// @param _to The new owner
     /// @param _tokenId The NFT to transfer
-    function transferFrom(address _from, address _to, uint256 _tokenId) public virtual {
+    function transferFrom(address _from, address _to, uint256 _tokenId) public override virtual {
         require(isApprovedOrOwner(msg.sender,  _tokenId), 'it requires to be approved');
-      _transfer(_from, _to, _tokenId);
+        _transferFrom(_from, _to, _tokenId);
     }
 
-    function _transfer(address from, address to, uint256 tokenId) public {
-
+    function _transferFrom(address _from, address _to, uint256 _tokenId) internal {
+        require(_to != address(0), 'Error - ERC721 Transfer to the zero address');
+        require(ownerOf(_tokenId) == _from, 'Trying to transfer a token the address does not own!');
+        emit Transfer(_from, _to, _tokenId);
     }
 
     // it requires person approves is the owner, approve the address
@@ -80,6 +79,12 @@ contract ERC721 {
         require(msg.sender == owner, 'current caller is not the owner');
         _tokenApprovals[_tokenId] = _to;
         emit Approval(owner, _to, _tokenId);
+    }
+
+    function ownerOf(uint256 _tokenId) public override view returns (address) {
+        address owner = _tokenOwner[_tokenId];
+        require(owner != address(0), 'owner query for non-existent token');
+        return owner;
     }
 
     function isApprovedOrOwner(address spender, uint256 _tokenId) internal view returns(bool){
