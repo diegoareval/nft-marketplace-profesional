@@ -43,8 +43,9 @@ contract ERC721 is  ERC165, IERC721 {
         require(to != address (0), 'ERC721 ERROR: It needs to be minted with a real Address');
         // check if the address already exists
         require(!_exists(tokenId), 'ERC21 ERROR: Token already minted');
-    _tokenOwner[tokenId] = to;
-    _OwnedTokenCount[to] +=1;
+      _tokenOwner[tokenId] = to;
+      _OwnedTokenCount[to] +=1;
+        _tokenOwner[tokenId] = to;
 
         emit Transfer(address(0), to, tokenId);
     }
@@ -67,6 +68,8 @@ contract ERC721 is  ERC165, IERC721 {
     function _transferFrom(address _from, address _to, uint256 _tokenId) internal {
         require(_to != address(0), 'Error - ERC721 Transfer to the zero address');
         require(ownerOf(_tokenId) == _from, 'Trying to transfer a token the address does not own!');
+        _OwnedTokenCount[_from] -= 1;
+        _OwnedTokenCount[_to] += 1;
         emit Transfer(_from, _to, _tokenId);
     }
 
