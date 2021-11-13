@@ -12,8 +12,6 @@ Make sure you are in the source file.
 
 For truffle tests and console please consult the official Truffle documentaion for updates.
 
-Follow the course module on Udemy to build this project from the ground up:
-https://www.udemy.com/course/the-complete-solidity-course-blockchain-zero-to-expert/
 
 init project with truffle.
 - truffle init
@@ -22,4 +20,17 @@ compile project
 
 deploy to local blockchain
 - truffle migrate
+
+img:
+<img src="https://i.ibb.co/XXXXzcK/k1.png" alt="k1" border="0">
+<img src="https://i.ibb.co/Q7gm3nn/k2.png" alt="k2" border="0">
+<img src="https://i.ibb.co/b55qrLf/k3.png" alt="k3" border="0">
+<img src="https://i.ibb.co/1RB8XNG/k4.png" alt="k4" border="0">
+<img src="https://i.ibb.co/HXnkGTh/k5.png" alt="k5" border="0">
+<img src="https://i.ibb.co/6rb83rs/k6.png" alt="k6" border="0">
+<img src="https://i.ibb.co/9yKfjSg/k7.png" alt="k7" border="0">
+<img src="https://i.ibb.co/tXn85JJ/k8.png" alt="k8" border="0">
+<img src="https://i.ibb.co/pWvFmVM/k9.png" alt="k9" border="0">
+<img src="https://i.ibb.co/VjxtjFv/k10.png" alt="k10" border="0">
+<img src="https://i.ibb.co/q5sb7y5/k11.png" alt="k11" border="0">
 

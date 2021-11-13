@@ -3,6 +3,8 @@ import Web3 from 'web3';
 import detectEthereumProvider from "@metamask/detect-provider";
 import Navbar from './navbar/Navbar.js'
 import KryptoBird from '../abis/CryptoBirdz.json';
+import KryptoBirdComponent from './cryptobird/CryptoBird'
+import './App.css'
 
 const App = ()=> {
     const [account, setAccount] = useState('');
@@ -52,8 +54,14 @@ const App = ()=> {
 
     const mint = (cryptoBird) => {
         if(contract){
-            contract.methods.mint(cryptoBird).send({from: account}).once('receipt', (receipt)=> {
-                setCryptoBirdz([...cryptoBirdz, receipt]);
+            contract.methods.mint(cryptoBird).send({from: account}, (error, result)=> {
+                if(result){
+                    setCryptoBirdz([...cryptoBirdz, cryptoBird]);
+                    setCryptoBird('')
+                    window.alert("result: "+ result );
+                }else{
+                    window.alert("error: "+ JSON.stringify(error) );
+                }
             })
         }else {
             window.alert("contract does not exist");
@@ -71,7 +79,7 @@ const App = ()=> {
     }
 
   return (
-      <div>
+      <div className="container-filled">
           <Navbar account={account}/>
           <div className="container-fluid mt-1">
             <div className="row">
@@ -91,6 +99,7 @@ const App = ()=> {
 
                 </main>
             </div>
+              <KryptoBirdComponent cryptoBirdz={cryptoBirdz}/>
           </div>
       </div>
   )
